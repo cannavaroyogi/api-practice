@@ -52,6 +52,17 @@ exports.delete = function(req, res) {
 Employee.delete( req.params.id, function(err, employee) {
     if (err)
         res.send(err);
+        
+    // if (err === []) {
+    //     res.send(err);
+    //     res.json({ error:true, message: "Data not found"});
+    // }
+    
+    if (employee !== null) {
         res.json({ error:false, message: 'Employee successfully deleted' });
+    } else {
+        res.json({ error:true, message: "Data not found"});
+    }
+        
     });
 };

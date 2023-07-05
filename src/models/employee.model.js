@@ -66,14 +66,27 @@ Employee.update = function (id, employee, result) {
 };
 
 Employee.delete = function (id, result) {
-    dbConn.query("delete from employees where id = ?", [id], function (err, res) {
-        if (condition) {
+    dbConn.query("select * from employees where id = ?", [id], function (err, response) {
+        if (err) {
             console.log("error: ", err);
             result(err, null);
-        } else {
-            result(null, res);
         }
-    });
+
+        if (response.length === 0) {
+            console.log("error: no data found");
+            result(err, null);
+        } else {
+            dbConn.query("delete from employees where id = ?", [id], function(err, res) {
+                if (err) {
+                    console.log("error: ", err);
+                    result(err, null);
+                } else {
+                    result(null, res);
+                }
+            });
+        }
+    })
+    
 };
 
 module.exports = Employee;
